@@ -6,7 +6,7 @@ import Map from '../../component/map/map';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useEffect } from 'react';
 import { fetchCommentsAction, fetchNearbyOffersAction, fetchOfferByIdAction, setFavoriteStatusAction } from '../../store/api-actions';
-import { getComments, getNearbyOffers, getOfferById, getOfferByIdLoadingStatus, getOffers } from '../../store/data-precess/selectors';
+import { getComments, getNearbyOffers, getOfferById, getOfferByIdLoadingStatus } from '../../store/data-precess/selectors';
 import MemorizedPlaceCard from '../../component/place-card/place-card';
 import { getAuthorizationStatus } from '../../store/user-process/selectors';
 import { AppRoute, AuthorizationStatus } from '../../const';
@@ -26,10 +26,9 @@ function OfferScreen (): JSX.Element {
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const offerById = useAppSelector(getOfferById);
   const nearbyOffers = useAppSelector(getNearbyOffers);
-  const offersData = useAppSelector(getOffers);
   const isOfferByIdLoading = useAppSelector(getOfferByIdLoadingStatus);
-  const currentOffer = offersData.find((item) => item.id === currentOfferId);
   const comment = useAppSelector(getComments);
+  const currentNearbyOffers = nearbyOffers.slice(0, NEARBY_OFFERS_COUNT);
 
   useEffect(() => {
     if (currentOfferId) {
@@ -75,13 +74,6 @@ function OfferScreen (): JSX.Element {
         });
     }
   };
-
-  const currentNearbyOffers = nearbyOffers ? nearbyOffers.slice(0, NEARBY_OFFERS_COUNT) : [];
-  const nearbyOffersPlusCurrent = [...currentNearbyOffers];
-
-  if (currentOffer) {
-    nearbyOffersPlusCurrent.unshift(currentOffer);
-  }
 
   return (
     <main className="page__main page__main--offer">
@@ -198,8 +190,8 @@ function OfferScreen (): JSX.Element {
         <section className="offer__map map">
           <Map
             location={offerById.city.location}
-            points={nearbyOffersPlusCurrent}
-            selectedPoint={currentOffer}
+            points={currentNearbyOffers}
+            selectedPoint={offerById}
           />
         </section>
       </section>
