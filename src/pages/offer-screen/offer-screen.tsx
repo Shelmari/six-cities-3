@@ -91,13 +91,6 @@ function OfferScreen (): JSX.Element {
       <section className="offer">
         <div className="offer__gallery-container container">
           <div className="offer__gallery">
-            {/* <div className="offer__image-wrapper">
-              <img
-                className="offer__image"
-                src={''}
-                alt={`Photo `}
-              />
-            </div> */}
             {offerById.images.map((image, index) => {
               if (index < OFFER_IMGS_COUNT) {
                 return (
